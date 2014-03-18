@@ -1,4 +1,3 @@
-
 /********************
  * HTML CSS
  */
@@ -565,6 +564,10 @@ svg .title {
 .nvd3.nv-bullet .nv-range.nv-s2 { fill: #ccc; }
 .nvd3.nv-bullet .nv-title { font-size: 14px; font-weight: bold; }
 .nvd3.nv-bullet .nv-subtitle { fill: #999; }
+
+/* FORCE - Additional css for markers in bulletforce.js */
+.nvd3.nv-bullet .nv-markerTriangleMin { stroke: #000; fill: #fff; stroke-width: 1.5px; }
+.nvd3.nv-bullet .nv-markerTriangleMax { stroke: #000; fill: #fff; stroke-width: 1.5px; }
 
 
 .nvd3.nv-bullet .nv-range {
