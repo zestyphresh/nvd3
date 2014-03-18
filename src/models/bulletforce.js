@@ -82,8 +82,8 @@ nv.models.bulletforce = function() {
       var g = wrap.select('g');
       
       // FORCE - Removed two ranges, only one required
-      gEnter.append('rect').attr('class', 'nv-rangeMin');
       gEnter.append('rect').attr('class', 'nv-rangeMax');
+      gEnter.append('rect').attr('class', 'nv-rangeMin');
       gEnter.append('rect').attr('class', 'nv-measure');
       gEnter.append('path').attr('class', 'nv-markerTriangleMin');
       gEnter.append('path').attr('class', 'nv-markerTriangleMax');
