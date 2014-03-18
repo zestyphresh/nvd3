@@ -44,6 +44,10 @@ nv.models.bulletforce = function() {
           rangeLabelz = rangeLabels.call(this, d, i).slice(),
           markerLabelz = markerLabels.call(this, d, i).slice(),
           measureLabelz = measureLabels.call(this, d, i).slice();
+          
+          console.log(rangez);
+          console.log(markerz);
+          console.log(measurez);
 
 
       //------------------------------------------------------------
@@ -63,7 +67,7 @@ nv.models.bulletforce = function() {
       this.__chart__ = x1;
 
       // FORCE - Removed rangeMax, rangeAvg
-      var rangeMin = d3.min(rangez);
+      var rangeMin = rangez[0];
 
       //------------------------------------------------------------
 
