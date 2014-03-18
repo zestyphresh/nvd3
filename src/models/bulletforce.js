@@ -99,11 +99,11 @@ nv.models.bulletforce = function() {
 
       g.select('rect.nv-rangeMin')
           .attr('height', availableHeight)
-          .attr('width', w1(rangeMax))
-          .attr('x', xp1(rangeMax))
-          .attr('width', w1(rangeMax > 0 ? rangeMin : rangeMax))
-          .attr('x', xp1(rangeMax > 0 ? rangeMin : rangeMax))
-          .datum(rangeMax > 0 ? rangeMin : rangeMax)
+          .attr('width', w1(rangeMin))
+          .attr('x', xp1(rangeMin))
+          .attr('width', w1(rangeMin > 0 ? rangeMin : rangeMin))
+          .attr('x', xp1(rangeMin > 0 ? rangeMin : rangeMin))
+          .datum(rangeMin > 0 ? rangeMin : rangeMin)
           /*
           .attr('width', rangeMax <= 0 ?
                              x1(rangeAvg) - x1(rangeMin)
