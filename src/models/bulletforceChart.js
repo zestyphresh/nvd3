@@ -1,13 +1,13 @@
 // Chart design based on the recommendations of Stephen Few. Implementation
 // based on the work of Clint Ivy, Jamie Love, and Jason Davies.
 // http://projects.instantcognition.com/protovis/bulletchart/
-nv.models.bulletChart = function() {
+nv.models.bulletforceChart = function() {
   "use strict";
   //============================================================
   // Public Variables with Default Settings
   //------------------------------------------------------------
 
-  var bullet = nv.models.bullet()
+  var bullet = nv.models.bulletforce()
     ;
 
   var orient = 'left' // TODO top & bottom
@@ -83,10 +83,10 @@ nv.models.bulletChart = function() {
       //------------------------------------------------------------
 
 
-
-      var rangez = ranges.call(this, d, i).slice().sort(d3.descending),
-          markerz = markers.call(this, d, i).slice().sort(d3.descending),
-          measurez = measures.call(this, d, i).slice().sort(d3.descending);
+      // FORCE - Removed sorting
+      var rangez = ranges.call(this, d, i).slice(),
+          markerz = markers.call(this, d, i).slice(),
+          measurez = measures.call(this, d, i).slice();
 
 
       //------------------------------------------------------------
@@ -106,8 +106,9 @@ nv.models.bulletChart = function() {
 
 
       // Compute the new x-scale.
+      // FORCE - take max from each array, required as sorting has been removed
       var x1 = d3.scale.linear()
-          .domain([0, Math.max(rangez[0], markerz[0], measurez[0])])  // TODO: need to allow forceX and forceY, and xDomain, yDomain
+          .domain([0, Math.max(d3.max(rangez), d3.max(markerz), d3.max(measurez)])  // TODO: need to allow forceX and forceY, and xDomain, yDomain
           .range(reverse ? [availableWidth, 0] : [0, availableWidth]);
 
       // Retrieve the old x-scale, if this is an update.
