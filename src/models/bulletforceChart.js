@@ -108,7 +108,7 @@ nv.models.bulletforceChart = function() {
       // Compute the new x-scale.
       // FORCE - take max from each array, required as sorting has been removed
       var x1 = d3.scale.linear()
-          .domain([0, Math.max(d3.max(rangez), d3.max(markerz), d3.max(measurez)])  // TODO: need to allow forceX and forceY, and xDomain, yDomain
+          .domain([0, Math.max(d3.max(rangez), d3.max(markerz), d3.max(measurez))])  // TODO: need to allow forceX and forceY, and xDomain, yDomain
           .range(reverse ? [availableWidth, 0] : [0, availableWidth]);
 
       // Retrieve the old x-scale, if this is an update.
