@@ -68,6 +68,7 @@ nv.models.bulletforce = function() {
 
       // FORCE - Removed rangeMax, rangeAvg
       var rangeMin = rangez[0];
+      var rangeMax = d3.max(d3.merge([rangez, measurez, markerz]));
 
       //------------------------------------------------------------
 
@@ -82,10 +83,9 @@ nv.models.bulletforce = function() {
       
       // FORCE - Removed two ranges, only one required
       gEnter.append('rect').attr('class', 'nv-range nv-rangeMin');
+      gEnter.append('rect').attr('class', 'nv-range nv-rangeMax');
       gEnter.append('rect').attr('class', 'nv-measure');
       gEnter.append('path').attr('class', 'nv-markerTriangleMin');
-      
-      // FORCE - Additional marker
       gEnter.append('path').attr('class', 'nv-markerTriangleMax');
 
       wrap.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
@@ -101,21 +101,19 @@ nv.models.bulletforce = function() {
 
       // FORCE - Removed rangeMax, rangeAvg code
 
+      g.select('rect.nv-rangeMax')
+          .attr('height', availableHeight)
+          .attr('width', w1(rangeMax > 0 ? rangeMax : rangeMin))
+          .attr('x', xp1(rangeMax > 0 ? rangeMax : rangeMin))
+          .datum(rangeMax > 0 ? rangeMax : rangeMin)
+
       g.select('rect.nv-rangeMin')
           .attr('height', availableHeight)
-          .attr('width', w1(rangeMin))
-          .attr('x', xp1(rangeMin))
-          .attr('width', w1(rangeMin > 0 ? rangeMin : rangeMin))
-          .attr('x', xp1(rangeMin > 0 ? rangeMin : rangeMin))
-          .datum(rangeMin > 0 ? rangeMin : rangeMin)
-          /*
-          .attr('width', rangeMax <= 0 ?
-                             x1(rangeAvg) - x1(rangeMin)
-                           : x1(rangeMax) - x1(rangeAvg))
-          .attr('x', rangeMax <= 0 ?
-                         x1(rangeMin)
-                       : x1(rangeAvg))
-                      */
+          .attr('width', w1(rangeMax))
+          .attr('x', xp1(rangeMax))
+          .attr('width', w1(rangeMax > 0 ? rangeMin : rangeMax))
+          .attr('x', xp1(rangeMax > 0 ? rangeMin : rangeMax))
+          .datum(rangeMax > 0 ? rangeMin : rangeMax)
 
       g.select('rect.nv-measure')
           .style('fill', color)
