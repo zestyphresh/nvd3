@@ -566,8 +566,8 @@ svg .title {
 .nvd3.nv-bullet .nv-subtitle { fill: #999; }
 
 /* FORCE - Additional css for markers in bulletforce.js */
-.nvd3.nv-bullet .nv-markerTriangleMin { stroke: #000; fill: #fff; stroke-width: 1.5px; }
-.nvd3.nv-bullet .nv-markerTriangleMax { stroke: #000; fill: #fff; stroke-width: 1.5px; }
+.nvd3.nv-bullet .nv-markerTriangleMin { stroke: #F87217; fill: #F87217; stroke-width: 1.5px; }
+.nvd3.nv-bullet .nv-markerTriangleMax { stroke: #7D0552; fill: #7D0552; stroke-width: 1.5px; }
 
 
 .nvd3.nv-bullet .nv-range {
