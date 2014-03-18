@@ -55,7 +55,7 @@ nv.models.bulletforce = function() {
 
       // Compute the new x-scale.
       var x1 = d3.scale.linear()
-          .domain( d3.extent(d3.merge([forceX, rangez])) )
+          .domain( d3.extent(d3.merge([forceX, rangez, measurez, markerz])) )
           .range(reverse ? [availableWidth, 0] : [0, availableWidth]);
 
       // Retrieve the old x-scale, if this is an update.
