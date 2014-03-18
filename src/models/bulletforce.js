@@ -164,7 +164,7 @@ nv.models.bulletforce = function() {
       // FORCE - Additional marker
       if (markerz[1]) {
         g.selectAll('path.nv-markerTriangleMax')
-            .attr('transform', function(d) { return 'translate(' + x1(markerz[0]) + ',' + (availableHeight / 2) + ')' })
+            .attr('transform', function(d) { return 'translate(' + x1(markerz[1]) + ',' + (availableHeight / 2) + ')' })
             .attr('d', 'M0,' + h3 + 'L' + h3 + ',' + (-h3) + ' ' + (-h3) + ',' + (-h3) + 'Z')
             .on('mouseover', function() {
               dispatch.elementMouseover({
