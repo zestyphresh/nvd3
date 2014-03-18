@@ -2,12 +2,14 @@
 // based on the work of Clint Ivy, Jamie Love, and Jason Davies.
 // http://projects.instantcognition.com/protovis/bulletchart/
 
-nv.models.bullet = function() {
+// FORCE - This amends the structure for a previous/actual/budget/target
+// implementation (range, measure, marker, marker respectively)
+
+nv.models.bulletforce = function() {
   "use strict";
   //============================================================
   // Public Variables with Default Settings
   //------------------------------------------------------------
-
   var margin = {top: 0, right: 0, bottom: 0, left: 0}
     , orient = 'left' // TODO top & bottom
     , reverse = false
@@ -33,10 +35,12 @@ nv.models.bullet = function() {
       var availableWidth = width - margin.left - margin.right,
           availableHeight = height - margin.top - margin.bottom,
           container = d3.select(this);
-
-      var rangez = ranges.call(this, d, i).slice().sort(d3.descending),
-          markerz = markers.call(this, d, i).slice().sort(d3.descending),
-          measurez = measures.call(this, d, i).slice().sort(d3.descending),
+          
+          
+      // FORCE - removed sorting, variables are input in correct order
+      var rangez = ranges.call(this, d, i).slice(),
+          markerz = markers.call(this, d, i).slice(),
+          measurez = measures.call(this, d, i).slice(),
           rangeLabelz = rangeLabels.call(this, d, i).slice(),
           markerLabelz = markerLabels.call(this, d, i).slice(),
           measureLabelz = measureLabels.call(this, d, i).slice();
@@ -58,10 +62,8 @@ nv.models.bullet = function() {
       // Stash the new scale.
       this.__chart__ = x1;
 
-
-      var rangeMin = d3.min(rangez), //rangez[2]
-          rangeMax = d3.max(rangez), //rangez[0]
-          rangeAvg = rangez[1];
+      // FORCE - Removed rangeMax, rangeAvg
+      var rangeMin = d3.min(rangez);
 
       //------------------------------------------------------------
 
@@ -73,12 +75,14 @@ nv.models.bullet = function() {
       var wrapEnter = wrap.enter().append('g').attr('class', 'nvd3 nv-wrap nv-bullet');
       var gEnter = wrapEnter.append('g');
       var g = wrap.select('g');
-
-      gEnter.append('rect').attr('class', 'nv-range nv-rangeMax');
-      gEnter.append('rect').attr('class', 'nv-range nv-rangeAvg');
+      
+      // FORCE - Removed two ranges, only one required
       gEnter.append('rect').attr('class', 'nv-range nv-rangeMin');
       gEnter.append('rect').attr('class', 'nv-measure');
-      gEnter.append('path').attr('class', 'nv-markerTriangle');
+      gEnter.append('path').attr('class', 'nv-markerTriangleMin');
+      
+      // FORCE - Additional marker
+      gEnter.append('path').attr('class', 'nv-markerTriangleMax');
 
       wrap.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
@@ -91,33 +95,7 @@ nv.models.bullet = function() {
       var xp0 = function(d) { return d < 0 ? x0(d) : x0(0) },
           xp1 = function(d) { return d < 0 ? x1(d) : x1(0) };
 
-
-      g.select('rect.nv-rangeMax')
-          .attr('height', availableHeight)
-          .attr('width', w1(rangeMax > 0 ? rangeMax : rangeMin))
-          .attr('x', xp1(rangeMax > 0 ? rangeMax : rangeMin))
-          .datum(rangeMax > 0 ? rangeMax : rangeMin)
-          /*
-          .attr('x', rangeMin < 0 ?
-                         rangeMax > 0 ?
-                             x1(rangeMin)
-                           : x1(rangeMax)
-                       : x1(0))
-                      */
-
-      g.select('rect.nv-rangeAvg')
-          .attr('height', availableHeight)
-          .attr('width', w1(rangeAvg))
-          .attr('x', xp1(rangeAvg))
-          .datum(rangeAvg)
-          /*
-          .attr('width', rangeMax <= 0 ?
-                             x1(rangeMax) - x1(rangeAvg)
-                           : x1(rangeAvg) - x1(rangeMin))
-          .attr('x', rangeMax <= 0 ?
-                         x1(rangeAvg)
-                       : x1(rangeMin))
-                      */
+      // FORCE - Removed rangeMax, rangeAvg code
 
       g.select('rect.nv-rangeMin')
           .attr('height', availableHeight)
@@ -159,7 +137,7 @@ nv.models.bullet = function() {
 
       var h3 =  availableHeight / 6;
       if (markerz[0]) {
-        g.selectAll('path.nv-markerTriangle')
+        g.selectAll('path.nv-markerTriangleMin')
             .attr('transform', function(d) { return 'translate(' + x1(markerz[0]) + ',' + (availableHeight / 2) + ')' })
             .attr('d', 'M0,' + h3 + 'L' + h3 + ',' + (-h3) + ' ' + (-h3) + ',' + (-h3) + 'Z')
             .on('mouseover', function() {
@@ -176,7 +154,29 @@ nv.models.bullet = function() {
               })
             });
       } else {
-        g.selectAll('path.nv-markerTriangle').remove();
+        g.selectAll('path.nv-markerTriangleMin').remove();
+      }
+      
+      // FORCE - Additional marker
+      if (markerz[1]) {
+        g.selectAll('path.nv-markerTriangleMax')
+            .attr('transform', function(d) { return 'translate(' + x1(markerz[0]) + ',' + (availableHeight / 2) + ')' })
+            .attr('d', 'M0,' + h3 + 'L' + h3 + ',' + (-h3) + ' ' + (-h3) + ',' + (-h3) + 'Z')
+            .on('mouseover', function() {
+              dispatch.elementMouseover({
+                value: markerz[1],
+                label: markerLabelz[1] || 'Previous',
+                pos: [x1(markerz[1]), availableHeight/2]
+              })
+            })
+            .on('mouseout', function() {
+              dispatch.elementMouseout({
+                value: markerz[1],
+                label: markerLabelz[1] || 'Previous'
+              })
+            });
+      } else {
+        g.selectAll('path.nv-markerTriangleMax').remove();
       }
 
 
@@ -198,98 +198,6 @@ nv.models.bullet = function() {
               label: label
             })
           })
-
-/* // THIS IS THE PREVIOUS BULLET IMPLEMENTATION, WILL REMOVE SHORTLY
-      // Update the range rects.
-      var range = g.selectAll('rect.nv-range')
-          .data(rangez);
-
-      range.enter().append('rect')
-          .attr('class', function(d, i) { return 'nv-range nv-s' + i; })
-          .attr('width', w0)
-          .attr('height', availableHeight)
-          .attr('x', reverse ? x0 : 0)
-          .on('mouseover', function(d,i) { 
-              dispatch.elementMouseover({
-                value: d,
-                label: (i <= 0) ? 'Maximum' : (i > 1) ? 'Minimum' : 'Mean', //TODO: make these labels a variable
-                pos: [x1(d), availableHeight/2]
-              })
-          })
-          .on('mouseout', function(d,i) { 
-              dispatch.elementMouseout({
-                value: d,
-                label: (i <= 0) ? 'Minimum' : (i >=1) ? 'Maximum' : 'Mean' //TODO: make these labels a variable
-              })
-          })
-
-      d3.transition(range)
-          .attr('x', reverse ? x1 : 0)
-          .attr('width', w1)
-          .attr('height', availableHeight);
-
-
-      // Update the measure rects.
-      var measure = g.selectAll('rect.nv-measure')
-          .data(measurez);
-
-      measure.enter().append('rect')
-          .attr('class', function(d, i) { return 'nv-measure nv-s' + i; })
-          .style('fill', function(d,i) { return color(d,i ) })
-          .attr('width', w0)
-          .attr('height', availableHeight / 3)
-          .attr('x', reverse ? x0 : 0)
-          .attr('y', availableHeight / 3)
-          .on('mouseover', function(d) { 
-              dispatch.elementMouseover({
-                value: d,
-                label: 'Current', //TODO: make these labels a variable
-                pos: [x1(d), availableHeight/2]
-              })
-          })
-          .on('mouseout', function(d) { 
-              dispatch.elementMouseout({
-                value: d,
-                label: 'Current' //TODO: make these labels a variable
-              })
-          })
-
-      d3.transition(measure)
-          .attr('width', w1)
-          .attr('height', availableHeight / 3)
-          .attr('x', reverse ? x1 : 0)
-          .attr('y', availableHeight / 3);
-
-
-
-      // Update the marker lines.
-      var marker = g.selectAll('path.nv-markerTriangle')
-          .data(markerz);
-
-      var h3 =  availableHeight / 6;
-      marker.enter().append('path')
-          .attr('class', 'nv-markerTriangle')
-          .attr('transform', function(d) { return 'translate(' + x0(d) + ',' + (availableHeight / 2) + ')' })
-          .attr('d', 'M0,' + h3 + 'L' + h3 + ',' + (-h3) + ' ' + (-h3) + ',' + (-h3) + 'Z')
-          .on('mouseover', function(d,i) {
-              dispatch.elementMouseover({
-                value: d,
-                label: 'Previous',
-                pos: [x1(d), availableHeight/2]
-              })
-          })
-          .on('mouseout', function(d,i) {
-              dispatch.elementMouseout({
-                value: d,
-                label: 'Previous'
-              })
-          });
-
-      d3.transition(marker)
-          .attr('transform', function(d) { return 'translate(' + (x1(d) - x1(0)) + ',' + (availableHeight / 2) + ')' });
-
-      marker.exit().remove();
-*/
 
     });
 
